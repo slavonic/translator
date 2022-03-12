@@ -10,7 +10,8 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
-    "ctc-beam-search": "file:../../ctc-beam-search",
+    "ctc-beam-search": "pgmmpk/ctc-beam-search",
+    "ctc-beam-search": "../../ctc-beam-search",
     "onnxruntime-web": "^1.9.0",
     "rollup": "^2.3.4",
     "rollup-plugin-copy": "^3.4.0",
