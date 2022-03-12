@@ -101,6 +101,7 @@
             <input type="radio" bind:group={casing} value="match"> тот же
             <input type="radio" bind:group={casing} value="lower"> нижний
             <input type="radio" bind:group={casing} value="upper"> верхний
+            <a class="src" href="https://github.com/slavonic/translator">github.com/slavonic/translator</a>
         </div>
     </div>
     <div class="slavonic border" bind:this={scrollable}>
@@ -219,4 +220,9 @@
         }
     }
 
+    .src {
+        display: block;
+        font-size: 70%;
+        color: gray;
+    }
 </style>
