@@ -3,12 +3,21 @@
     import { Debounce } from './debounce.js';
     import { onMount, tick } from 'svelte';
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDebug = urlParams.has('debug');
+
     const PLACEHOLDER = 'Набираем текст гражданским шрифтом здесь. Например: во имя отца и сына и святаго духа, аминь';
 
     let predictor;
 
     onMount(async () => {
-        predictor = await Predictor.load('build/model.onnx', 'build/vocab.json', 0, 'build/cu-words-civic-dedup.txt');
+        predictor = await Predictor.load(
+            'build/model.onnx',
+            'build/vocab.json',
+            0,
+            'build/cu-words-civic-dedup.txt',
+            isDebug
+        );
         console.log('Predictor loaded!');
     });
 
@@ -156,9 +165,9 @@
         text-align: center;
     }
 
-    @media (min-width: 640px) {
-        main {
-            max-width: none;
+    @media (max-height: 640) {
+        h2, h1 {
+            display: none;
         }
     }
     .slavonic {

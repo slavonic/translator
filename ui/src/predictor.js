@@ -2,14 +2,15 @@ import { Tensor, InferenceSession } from "onnxruntime-web";
 import { CTCBeamSearch, Vocabulary } from 'ctc-beam-search';
 
 export class Predictor {
-    constructor(session, voc, cheatMap) {
+    constructor(session, voc, cheatMap, isDebug = false) {
         this.session = session;
         this.voc = voc;
         this.cheatMap = cheatMap || {};
+        this.isDebug = isDebug;
         this.voclen = Object.keys(voc.indexToChar).length;
     }
 
-    static async load(modelName, vocabName, blankIndex = 0, cheatListName) {
+    static async load(modelName, vocabName, blankIndex = 0, cheatListName, isDebug = false) {
         const session = await InferenceSession.create(modelName);
         const vocab = await (await fetch(vocabName)).json();
         const voc = new Vocabulary(vocab, blankIndex);
@@ -27,19 +28,20 @@ export class Predictor {
 
             // some unaccented RU entries in the corpus are mapped to unaccented CU
             // (свѧтагѡ -> святаго). We prefer accented version, hence overwrite here...
+            // but short single-syllable words, like ни, и, etc should be left unaccented!
             for (const [ru, cu] of Object.entries(cheatMap)) {
                 const ruNoAccent = ru.replace('\u0301', '');
-                if (ru !== ruNoAccent) {
+                if (ru !== ruNoAccent && ruNoAccent.length > 2) {
                     cheatMap[ruNoAccent] = cu;
                 }
             }
             console.log(`Loaded ${count} cheat map entries`);
         }
-        return new Predictor(session, voc, cheatMap);
+        return new Predictor(session, voc, cheatMap, isDebug);
     }
 
     async predict(text) {
-        if (this.cheatMap[text] !== undefined) {
+        if (this.cheatMap[text] !== undefined && !this.isDebug) {
             return this.cheatMap[text];
         }
 
