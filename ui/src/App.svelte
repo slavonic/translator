@@ -174,6 +174,7 @@
         font-family: 'Ponomar Unicode';
         font-size: 120%;
         overflow: auto;
+        min-height: 50px;
     }
 
     textarea {
@@ -229,6 +230,11 @@
         }
     }
 
+    @media screen and (max-height: 480px) {
+        h2, h1 {
+            display: none;
+        }
+    }
     .src {
         display: block;
         font-size: 70%;
