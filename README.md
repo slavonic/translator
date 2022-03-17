@@ -1,5 +1,17 @@
 # Word translation from civic script to Church Slavonic
 
+Web application: https://sci.ponomar.net/translate
+
+Architecture:
+* Uses large corpus of Church Slavonic texts to collect word list (with frequences)
+* Words are automatically converted to civic script, preserving accents. This is the basis for conversion
+  from civic to Church Slavonic. Except that sometimes different Church Slavonic forms reduce to the same
+  civic form. In such a case we pick the most frequent variant of Church Slavonic form.
+* Out-of-vocabulary words are converted using ML-trained interpolator (see below for the training
+  instructions)
+
+## Training logs
+
 https://wandb.ai/elbat/translator/reports/---VmlldzoxNjc4NDQy/edit?firstReport=&runsetFilter
 
 ## Data preparation
