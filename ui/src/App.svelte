@@ -6,7 +6,12 @@
     const urlParams = new URLSearchParams(window.location.search);
     const isDebug = urlParams.has('debug');
 
-    const PLACEHOLDER = 'Набираем текст гражданским шрифтом здесь. Например: во имя отца и сына и святаго духа, аминь';
+    const PLACEHOLDER = `Набираем текст гражданским шрифтом здесь. Например: во имя отца и сына и святаго духа, аминь
+
+Для ударений можно использовать символ одиночной правой кавычки ( ' ).
+
+Напоминаем, что перевод не 100% правильный и требуется вычитка результата.
+`;
 
     let predictor;
 
@@ -120,7 +125,8 @@
     </div>
     <div>
         {#if predictor === undefined}
-            <div class="wrapper" style="--size:60px; --color:#FF3E00;">
+        <div class="center">Подождите, идёт загрузка...</div>
+        <div class="wrapper" style="--size:60px; --color:#FF3E00;">
                 <div class="circle"
                     style="animation: 2.1s ease-in-out 1s infinite normal none running none;"
                 >
@@ -202,7 +208,7 @@
     }
     .wrapper {
         position: relative;
-        margin-top: 10%;
+        margin-top: 5%;
         width: var(--size);
         height: var(--size);
         margin-left: auto;
@@ -239,5 +245,9 @@
         display: block;
         font-size: 70%;
         color: gray;
+    }
+
+    .center {
+        text-align: center;
     }
 </style>
