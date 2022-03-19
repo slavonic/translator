@@ -2,15 +2,17 @@
   "name": "translator-ui",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "start": "sirv public --no-clear",
+    "test": "ava"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
-    "ctc-beam-search": "pgmmpk/ctc-beam-search",
+    "ava": "^4.1.0",
     "ctc-beam-search": "../../ctc-beam-search",
     "onnxruntime-web": "^1.9.0",
     "rollup": "^2.3.4",

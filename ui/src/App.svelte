@@ -2,6 +2,7 @@
     import { Predictor } from './predictor.js';
     import { Debounce } from './debounce.js';
     import { onMount, tick } from 'svelte';
+    import { cu_format_int } from './numerals.js';
 
     const urlParams = new URLSearchParams(window.location.search);
     const isDebug = urlParams.has('debug');
@@ -34,7 +35,7 @@
     let scrollable;
     const cache = {};
 
-    async function engine(text, casing) {
+    async function engine(text, casing, numerals) {
         await tick();
         const pieces = text.split(RU_TEXT_SPLITTER);
 
@@ -45,7 +46,7 @@
             const lowerPiece = piece.toLowerCase();
             let t;
             if (!RU_TEXT_TESTER.test(piece)) {
-                t = mapPunctuation(piece);
+                t = mapPunctuation(piece, numerals);
             } else if (cache[lowerPiece] !== undefined) {
                 t = cache[lowerPiece];
             } else {
@@ -71,6 +72,7 @@
     const RU_TEXT = '[абвгдежзийклмнопрстуфхцчшщьыъэюя\u0301\']+';
     const RU_TEXT_SPLITTER = new RegExp(`(${RU_TEXT})`, 'i');
     const RU_TEXT_TESTER = new RegExp(`^${RU_TEXT}$`, 'i');
+    const NUM_SPLITTER = /(\d+)/;
 
     function maybeRestoreCaps(text, translation) {
         if (text.toLowerCase() === text) {
@@ -86,35 +88,50 @@
         }
     }
 
-    function mapPunctuation(text) {
+    function mapPunctuation(text, numerals) {
         text = text.replace(/\/\//g, ' *');
         text = text.replace(/\//g, ' *');
         text = text.replace(/;/g, '.');
         text = text.replace(/\?/g, ';');
         text = text.replace(/\s+/g, ' ');
-        return text;
+
+        if (!numerals) {
+            return text;
+        }
+
+        const pieces = text.split(NUM_SPLITTER).map(piece => {
+            if (/^\d+$/.test(piece)) {
+                return cu_format_int(+piece);
+            } else {
+                return piece;
+            }
+        });
+
+        return pieces.join('');
     }
 
     const debounce = new Debounce(engine);
 
     let userText = '';
     let casing = 'match';
+    let numerals = true;
 
-    $: onUserTextChange(userText, casing);
-    function onUserTextChange(userText, casing) {
-        debounce.call(userText, casing);
+    $: onUserTextChange(userText, casing, numerals);
+    function onUserTextChange(userText, casing, numerals) {
+        debounce.call(userText, casing, numerals);
     }
 </script>
 
 <main>
     <div>
         <h1>Переводилка</h1>
-        <h2>(с гражданского шрифта на ЦСЯ)</h2>
+        <h2>(из гражданской в церковнославянскую орфографию)</h2>
         <div class="notes">
             Регистр:
             <input type="radio" bind:group={casing} value="match"> тот же
             <input type="radio" bind:group={casing} value="lower"> нижний
             <input type="radio" bind:group={casing} value="upper"> верхний
+            <input type="checkbox" bind:checked={numerals}> цифирь
             <a class="src" href="https://github.com/slavonic/translator">github.com/slavonic/translator</a>
         </div>
     </div>
@@ -163,8 +180,8 @@
 
     h2 {
         color: #ff3e00;
-        font-size: 3em;
-        font-weight: 100;
+        font-size: 1.5em;
+        font-weight: 200;
         padding: 0;
         margin-top: 0;
         margin-bottom: 0.25em;
