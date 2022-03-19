@@ -7,7 +7,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const isDebug = urlParams.has('debug');
 
-    const PLACEHOLDER = `Набираем текст гражданским шрифтом здесь. Например: во имя отца и сына и святаго духа, аминь
+    const PLACEHOLDER = `Набираем текст в гражданской орфографии здесь. Например: во имя отца и сына и святаго духа, аминь
 
 Для ударений можно использовать символ одиночной правой кавычки ( ' ).
 
