@@ -56,6 +56,7 @@ export class Predictor {
         text = text.replace(/'/g, '\u0301')
         const accentsIndex = text.indexOf('\u0301');
         text = text.replace(/\u0301/g, '')
+        text = text.replace('э', 'е');
         if (accentsIndex > 0) {
             accentsArray[accentsIndex - 1] = 1;
         }
