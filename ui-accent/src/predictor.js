@@ -21,15 +21,11 @@ export class Predictor {
             const cheatText = await (await fetch(cheatListName)).text();
             let count = 0;
             for (const line of cheatText.split('\n')) {
-                const [cu, ru] = line.trim().split('\t').map(x => x.trim());
-                if (cu !== undefined && ru !== undefined) {
+                const [ru, nk] = line.trim().split('\t').map(x => x.trim());
+                if (ru !== undefined && nk !== undefined) {
                     const accentIndex = ru.indexOf('\u0301');
-                    const template = ru.replace('\u0301', '');
-                    if (template === 'ими') {
-                        console.log(ru)
-                    }
-                    if (accentIndex > 0 && cheatMap[template] === undefined) {
-                        cheatMap[template] = accentIndex - 1;
+                    if (accentIndex > 0 && cheatMap[nk] === undefined) {
+                        cheatMap[nk] = accentIndex - 1;
                         count += 1;
                     }
                 }
@@ -79,10 +75,8 @@ export class Predictor {
             if (accentIndex === undefined) {
                 accentIndex = -1;
             }
-            console.log('ML accent index:', accentIndex);
         }
 
-        console.log('Final accent index:', accentIndex, text.length);
         if (accentIndex !== undefined && accentIndex >= 0 && accentIndex <= text.length) {
             text = text.slice(0, accentIndex + 1) + '\u0301' + text.slice(accentIndex + 1);
         }

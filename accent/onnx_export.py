@@ -74,6 +74,7 @@ def sample(onnx_model, words=['лепота', 'несть']):
     labels[0] = ''
 
     for l,word in zip(logits, words):
+        print(word, l)
         for i,a in enumerate(l):
             if a[1] > a[0]:
                 accent = i
@@ -83,7 +84,7 @@ def sample(onnx_model, words=['лепота', 'несть']):
 
         if 0 <= accent < len(word):
             word = list(word)
-            word.insert(accent, '\u0301')
+            word.insert(accent + 1, '\u0301')
             word = ''.join(word)
 
         print(word)

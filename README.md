@@ -12,7 +12,13 @@ Architecture:
 
 ## Training logs
 
-https://wandb.ai/elbat/translator/reports/---VmlldzoxNjc4NDQy/edit?firstReport=&runsetFilter
+For translator:
+https://wandb.ai/elbat/translator/reports/---VmlldzoxNjc4NDQy
+https://wandb.ai/elbat/translator/reports/-2022-06-29--VmlldzoyMjQ0MDM1
+
+
+For accentor:
+https://wandb.ai/elbat/accent/reports/Accent-training--VmlldzoyMjQwNDM4
 
 ## Data preparation
 
@@ -21,11 +27,13 @@ See data/README.md
 ## Training
 ```bash
 python -m translator.train
+python -m accent.train
 ```
 
 ## Reviewing
 ```bash
 python -m translator.review
+python -m accent.review
 ```
 This command will use validation partition to compute the error rates. It computes
 error rates on accented and unaccented input separately, and also provides overall
@@ -36,6 +44,7 @@ error rates on accented and unaccented input separately, and also provides overa
 
 ```bash
 python -m translator.onnx_export
+python -m accent.onnx_export
 ```
 This command takes `model.ckpt` (result of training) and exports model to ONNX format
 creating `model.onnx` and `vocab.json`.

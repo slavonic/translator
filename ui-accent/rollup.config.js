@@ -74,7 +74,7 @@ export default {
 		copy({
 			targets: [
 				{ src: 'node_modules/onnxruntime-web/dist/*.wasm', dest: 'public/build' },
-				{ src: '../data/cu-words-civic-dedup.txt', dest: 'public/build' },
+				{ src: '../data/cu-words-civic-dedup-accent.txt', dest: 'public/build' },
 				{ src: '../model-accent.onnx', dest: 'public/build' },
 				{ src: '../vocab-accent.json', dest: 'public/build' },
 			],

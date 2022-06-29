@@ -9,13 +9,13 @@ import collections
 
 
 class TranslatorDataset(pl.LightningDataModule):
-    def __init__(self, *, fname='data/cu-words-civic.txt',
+    def __init__(self, *, fname='data/cu-words-civic-dedup.txt',
             max_len=32, batch_size=512):
         super().__init__()
         self.fname = fname
         self.max_len = max_len
         self.batch_size = batch_size
-        self._cache = os.path.expanduser(r'~/.cache/translator_dataset6')
+        self._cache = os.path.expanduser(r'~/.cache/translator_dataset7')
 
     def cache(self, name):
         return os.path.join(self._cache, name)
@@ -35,17 +35,8 @@ class TranslatorDataset(pl.LightningDataModule):
         os.makedirs(self.cache(''), exist_ok=True)
 
         with open(self.fname, encoding='utf-8') as f:
-            data = [l.strip().split() for l in f]
-        print(f'Loaded {len(data)} samples')
-
-        byru = collections.defaultdict(collections.Counter)
-        for cu, ru, count in data:
-            byru[ru].update([cu] * int(count))
-
-        dedup = []
-        for ru in byru.keys():
-            cu = byru[ru].most_common(1)[0][0]
-            dedup.append( (cu, ru) )
+            dedup = [l.strip().split() for l in f]
+        print(f'Loaded {len(dedup)} samples')
 
         random.shuffle(dedup)
         val_partition = dedup[:int(0.02 * len(dedup))]

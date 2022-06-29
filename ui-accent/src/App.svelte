@@ -19,7 +19,7 @@
         predictor = await Predictor.load(
             'build/model-accent.onnx',
             'build/vocab-accent.json',
-            'build/cu-words-civic-dedup.txt',
+            'build/cu-words-civic-dedup-accent.txt',
             isDebug
         );
         console.log('Predictor loaded!', isDebug);
@@ -116,7 +116,7 @@
     }
 
     h1 {
-        color: #ff3e00;
+        color: #54109d;
         font-size: 4em;
         font-weight: 100;
         margin: 0;
@@ -124,7 +124,7 @@
     }
 
     h2 {
-        color: #ff3e00;
+        color: #54109d;
         font-size: 1.5em;
         font-weight: 200;
         padding: 0;

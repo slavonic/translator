@@ -9,13 +9,13 @@ import collections
 
 
 class AccentDataset(pl.LightningDataModule):
-    def __init__(self, *, fname='data/cu-words-civic-dedup.txt',
+    def __init__(self, *, fname='data/cu-words-civic-dedup-accent.txt',
             max_len=32, batch_size=512):
         super().__init__()
         self.fname = fname
         self.max_len = max_len
         self.batch_size = batch_size
-        self._cache = os.path.expanduser(r'~/.cache/accent_dataset')
+        self._cache = os.path.expanduser(r'~/.cache/accent_dataset1')
 
     def cache(self, name):
         return os.path.join(self._cache, name)
@@ -35,7 +35,7 @@ class AccentDataset(pl.LightningDataModule):
         os.makedirs(self.cache(''), exist_ok=True)
 
         with open(self.fname, encoding='utf-8') as f:
-            data = [l.strip().split()[-1] for l in f]
+            data = [l.strip().split()[1] for l in f]
         print(f'Loaded {len(data)} samples')
 
         random.shuffle(data)

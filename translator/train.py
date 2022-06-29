@@ -1,16 +1,16 @@
 import torch
 import pytorch_lightning as pl
-from translator.translator_dataset6 import TranslatorDataset6
+from translator.translator_dataset import TranslatorDataset
 from pytorch_lightning.loggers import WandbLogger
-from translator.model3 import Model3
+from translator.model import Model
 import torch
 
-def main(max_epochs=20, max_steps=100_000, max_chars=32, load_checkpoint=None, resume=False, save_checkpoint='model.ckpt'):
+def main(max_epochs=20, max_steps=4_000, max_chars=32, load_checkpoint=None, resume=False, save_checkpoint='model.ckpt'):
 
-    datamodule = TranslatorDataset6()
+    datamodule = TranslatorDataset()
     datamodule.prepare_data()
 
-    model = Model3(datamodule.vocab_size, max_chars)
+    model = Model(datamodule.vocab_size, max_chars)
     if load_checkpoint is not None:
         if not resume:
             # here I load only model weights, but not optimizer state - because
@@ -19,7 +19,7 @@ def main(max_epochs=20, max_steps=100_000, max_chars=32, load_checkpoint=None, r
             x = torch.load(load_checkpoint)
             model.load_state_dict(x['state_dict'])
         else:
-            model = Model3.load_from_checkpoint(load_checkpoint, vocab_size=datamodule.vocab_size, max_seq_len=max_chars)
+            model = Model.load_from_checkpoint(load_checkpoint, vocab_size=datamodule.vocab_size, max_seq_len=max_chars)
 
     trainer = pl.Trainer(
         max_epochs=max_epochs,
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='train the model')
     parser.add_argument('-e', '--epochs', type=int, default=20, help='How many epochs to train')
-    parser.add_argument('-t', '--steps', type=int, default=100_000, help='How many steps to train')
+    parser.add_argument('-t', '--steps', type=int, default=4_000, help='How many steps to train')
     parser.add_argument('-m', '--max_chars', type=int, default=32, help='Max chars in a word')
     parser.add_argument('-l', '--load', help='Load a checkpoint')
     parser.add_argument('-r', '--resume', action='store_true', help='Resume training (restore model AND optimizer state)')

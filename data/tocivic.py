@@ -17,6 +17,8 @@ TITLO = '\u0483'
 ALLOWED = '\u0301абвгдежзийклмнопрстуфхцчшщьыъэюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ-'
 ALLOWED = set(ALLOWED)
 
+VOWELS = 'аеиоуыэюя'
+
 MAP = {
     'ѧ': 'я',
     'ѣ': 'е',
@@ -95,31 +97,57 @@ def maybe_digit(word):
             return True
     return False
 
+
+EXCEPTIONS = {
+    # 'аллилꙋїа': 'аллилу́иа',
+    # 'аминь': 'ам\u0301инь',
+    # 'апостола': 'ап\u0301остола',
+    # 'архїерей': 'архиере\u0301й',
+    # 'архїереовꙋ': 'архиере\u0301ову',
+    # 'аще': 'а\u0301ще',
+    # 'без̾именитое': 'безъимени\u0301тое',
+}
+
 def tocivic(word):
     if maybe_digit(word):
         return None
     if word in { '†' }:
         return None
+    if word in EXCEPTIONS:
+        return EXCEPTIONS[word]
     word = unicodedata.normalize('NFD', word)
+    if word[0] == 'ѿ' and C_PNEUMATA not in word:
+        word = 'о' + C_PNEUMATA + 'т' + word[1:]  # synthesize pheumata
+
     civic = ''.join(MAP.get(x, x) for x in word)
     civic = re.sub(r'ѵ҆', 'и' + C_PNEUMATA, civic)
+
     if C_ACUTE in civic:
         civic = civic.replace(C_GRAVE, '').replace(C_CAP, '')
     elif C_GRAVE in civic:
         civic = civic.replace(C_CAP, '').replace(C_GRAVE, C_ACUTE)
     elif C_CAP in civic:
         civic = civic.replace(C_CAP, C_ACUTE)
+    elif C_PNEUMATA in civic:
+        civic = civic.replace(C_PNEUMATA, C_ACUTE)
+    elif C_DIAERESIS in civic:
+        civic = civic.replace(C_DIAERESIS, C_ACUTE)
     civic = civic.replace(C_PNEUMATA, '').replace(C_DIAERESIS, '')
     civic = civic.replace('\u1c82', '')
     civic = unicodedata.normalize('NFC', civic)
-    civic = re.sub(r'ѵ́', 'и', civic)
-    civic = civic.replace('ѷ', 'и')
+    civic = re.sub(r'ѵ́', 'и\u0301', civic)
+    if C_ACUTE in civic:
+        civic = civic.replace('ѷ', 'и')
+    else:
+        civic = civic.replace('ѷ', 'и\u0301')
     civic = civic.replace('ѵ', 'в')
     if civic[-1] == 'ъ':
         civic = civic[:-1]
     if len(civic) == 0:
         return None
     if len(set(civic) - ALLOWED) == 0:
+        if len([c for c in civic if c in VOWELS]) < 2:
+            civic = civic.replace('\u0301', '')  # need no accents in a single-vowel word
         return civic
     print(word, civic, [x.encode('unicode-escape') for x in set(civic) - ALLOWED])
     return None

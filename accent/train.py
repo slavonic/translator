@@ -5,7 +5,7 @@ from pytorch_lightning.loggers import WandbLogger
 from accent.model import Model
 import torch
 
-def main(max_epochs=20, max_steps=100_000, max_chars=32, load_checkpoint=None, resume=False, save_checkpoint='model.ckpt'):
+def main(max_epochs=20, max_steps=4_000, max_chars=32, load_checkpoint=None, resume=False, save_checkpoint='model.ckpt'):
 
     datamodule = AccentDataset()
     datamodule.prepare_data()
@@ -24,7 +24,7 @@ def main(max_epochs=20, max_steps=100_000, max_chars=32, load_checkpoint=None, r
     trainer = pl.Trainer(
         max_epochs=max_epochs,
         max_steps=max_steps,
-        logger=WandbLogger(log_model=True, project='hyphenator'),
+        logger=WandbLogger(log_model=True, project='accent'),
         # resume_from_checkpoint=load_checkpoint,
         callbacks=[pl.callbacks.LearningRateMonitor(logging_interval='step')],
     )
