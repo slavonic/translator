@@ -9,13 +9,13 @@ import collections
 
 
 class AccentruDataset(pl.LightningDataModule):
-    def __init__(self, *, fname='data/stress.dict',
+    def __init__(self, *, fname='data/ru_stress.txt',
             max_len=32, batch_size=512):
         super().__init__()
         self.fname = fname
         self.max_len = max_len
         self.batch_size = batch_size
-        self._cache = os.path.expanduser(r'~/.cache/accentru_dataset0')
+        self._cache = os.path.expanduser(r'~/.cache/accentru_dataset2')
 
     def cache(self, name):
         return os.path.join(self._cache, name)
@@ -35,7 +35,7 @@ class AccentruDataset(pl.LightningDataModule):
         os.makedirs(self.cache(''), exist_ok=True)
 
         with open(self.fname, encoding='utf-8') as f:
-            data = [l.strip().split('|')[1] for l in f]
+            data = [l.strip() for l in f if l.strip()]
         print(f'Loaded {len(data)} samples')
 
         random.shuffle(data)
@@ -45,7 +45,7 @@ class AccentruDataset(pl.LightningDataModule):
         charset = set()
         for word in train_partition + val_partition:
             charset.update(word)
-        charset.remove('+')
+        charset.remove('\u0301')
         vocab = ['<pad>'] + sorted(charset)
         print(f'Vocab length: {len(vocab)}')
 
@@ -86,14 +86,14 @@ class AccentruDataset(pl.LightningDataModule):
 
         def mk_tensors(dataset):
             dataset_in  = torch.zeros( (len(dataset), self.max_len), dtype=torch.long)
-            dataset_out  = torch.zeros( (len(dataset), self.max_len), dtype=torch.long)
+            dataset_out = torch.zeros( (len(dataset), self.max_len), dtype=torch.long)
             dataset_len = torch.zeros( (len(dataset),), dtype=torch.long)
 
             count = 0
             for word in dataset:
-                if '+' in word:
-                    ai = word.index('+')
-                    word = word.replace('+', '')
+                if '\u0301' in word:
+                    ai = word.index('\u0301') - 1
+                    word = word.replace('\u0301', '')
                 else:
                     ai = -1
                 dataset_len[count] = len(word)
