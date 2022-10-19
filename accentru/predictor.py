@@ -53,6 +53,7 @@ class VocabPredictor:
     def __init__(self, data_dict):
         with open(data_dict, encoding='utf-8') as f:
             words = [l.strip() for l in f if l.strip()]
+        words = []
         self._data = {}
         for word in words:
             assert word.lower() == word

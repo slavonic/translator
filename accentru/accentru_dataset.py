@@ -9,13 +9,13 @@ import collections
 
 
 class AccentruDataset(pl.LightningDataModule):
-    def __init__(self, *, fname='data/ru_stress.txt',
+    def __init__(self, *, fname='data/accent-vocab.txt',
             max_len=32, batch_size=512):
         super().__init__()
         self.fname = fname
         self.max_len = max_len
         self.batch_size = batch_size
-        self._cache = os.path.expanduser(r'~/.cache/accentru_dataset2')
+        self._cache = os.path.expanduser(r'~/.cache/accentru_dataset4')
 
     def cache(self, name):
         return os.path.join(self._cache, name)
@@ -34,8 +34,15 @@ class AccentruDataset(pl.LightningDataModule):
 
         os.makedirs(self.cache(''), exist_ok=True)
 
+        def accentit(word):
+            assert '+' in word
+            index = word.index('+')
+            word = list(word.replace('+', ''))
+            word.insert(index + 1, '\u0301')
+            return ''.join(word)
+
         with open(self.fname, encoding='utf-8') as f:
-            data = [l.strip() for l in f if l.strip()]
+            data = [accentit(l.strip()) for l in f if l.strip()]
         print(f'Loaded {len(data)} samples')
 
         random.shuffle(data)
