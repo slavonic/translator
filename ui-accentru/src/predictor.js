@@ -23,7 +23,7 @@ export class Predictor {
             for (const line of cheatText.split('\n')) {
                 const word = line.trim();
                 const accentIndex = word.indexOf('\u0301');
-                cheatMap[word.toLowerCase()] = accentIndex - 1;
+                cheatMap[word.toLowerCase().replace('\u0301', '')] = accentIndex - 1;
                 count += 1;
             }
             console.log(`Loaded ${count} cheat map entries`);
