@@ -1,8 +1,7 @@
-import torch
-import pytorch_lightning as pl
-from accentru.accentru_dataset import AccentruDataset
-from accent.model import Model
 import numpy as np
+
+from accent.model import Model
+from accentru.accentru_dataset import AccentruDataset
 
 datamodule = AccentruDataset()
 datamodule.prepare_data()

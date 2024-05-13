@@ -1,9 +1,10 @@
+import lightning as L
 import torch
-import pytorch_lightning as pl
-from translator.translator_dataset import TranslatorDataset
-from pytorch_lightning.loggers import WandbLogger
+from lightning.pytorch.loggers import WandbLogger
+
 from translator.model import Model
-import torch
+from translator.translator_dataset import TranslatorDataset
+
 
 def main(max_epochs=20, max_steps=4_000, max_chars=32, load_checkpoint=None, resume=False, save_checkpoint='model.ckpt'):
 
@@ -21,12 +22,12 @@ def main(max_epochs=20, max_steps=4_000, max_chars=32, load_checkpoint=None, res
         else:
             model = Model.load_from_checkpoint(load_checkpoint, vocab_size=datamodule.vocab_size, max_seq_len=max_chars)
 
-    trainer = pl.Trainer(
+    trainer = L.Trainer(
         max_epochs=max_epochs,
         max_steps=max_steps,
         logger=WandbLogger(log_model=True, project='translator'),
         # resume_from_checkpoint=load_checkpoint,
-        callbacks=[pl.callbacks.LearningRateMonitor(logging_interval='step')],
+        callbacks=[L.pytorch.callbacks.LearningRateMonitor(logging_interval='step')],
     )
     trainer.fit(model, datamodule)
 

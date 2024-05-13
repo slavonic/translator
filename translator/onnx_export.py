@@ -1,5 +1,4 @@
 import torch
-import pytorch_lightning as pl
 from translator.translator_dataset import TranslatorDataset
 from translator.model import Model
 import onnx
@@ -60,13 +59,7 @@ def to_onnx(model_checkpoint='model.ckpt', onnx_filename='model.onnx'):
     print(torch_logits)
 
 def sample(onnx_model, words=['лепота', 'несть']):
-
     session = ort.InferenceSession('model.onnx')
-
-    logits = session.run(None, {
-        'inputs': inputs.numpy(),
-        'accents': accents.numpy(),
-    })
 
     inputs = np.zeros((len(words), 32), dtype=np.int32)
     accents = np.zeros((len(words), 32), dtype=np.int32)

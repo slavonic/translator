@@ -1,14 +1,12 @@
-import pytorch_lightning as pl
-import torch
-import torch.utils.data
-import torch.nn.functional as F
 import os
 import random
-import re
-import collections
+
+import lightning as L
+import torch
+import torch.utils.data
 
 
-class AccentruDataset(pl.LightningDataModule):
+class AccentruDataset(L.LightningDataModule):
     def __init__(self, *, fname='data/accent-vocab.txt',
             max_len=32, batch_size=512):
         super().__init__()
@@ -168,7 +166,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    data = AccentDataset(max_len=args.max_len, batch_size=args.batch_size)
+    data = AccentruDataset(max_len=args.max_len, batch_size=args.batch_size)
     data.prepare_data()
     data.setup()
 

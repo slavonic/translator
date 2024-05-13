@@ -1,7 +1,3 @@
-import json
-import onnxruntime as ort
-import re
-import numpy as np
 from .predictor import MLPredictor
 
 def compress_stress(onnx_model, vocab, data, data_compressed):

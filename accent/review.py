@@ -1,5 +1,3 @@
-import torch
-import pytorch_lightning as pl
 from accent.accent_dataset import AccentDataset
 from accent.model import Model
 

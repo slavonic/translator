@@ -1,7 +1,5 @@
-import torch
-import pytorch_lightning as pl
-from translator.translator_dataset import TranslatorDataset
 from translator.model import Model
+from translator.translator_dataset import TranslatorDataset
 
 datamodule = TranslatorDataset()
 datamodule.prepare_data()

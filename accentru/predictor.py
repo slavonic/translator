@@ -1,7 +1,9 @@
 import json
-import onnxruntime as ort
 import re
+
 import numpy as np
+import onnxruntime as ort
+
 
 class Predictor:
     RE = "[абвгдеёжзийклмнопрстуфхцчшщьыъэюя'\u0301]+"

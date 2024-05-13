@@ -1,9 +1,9 @@
+import lightning as L
 import torch
 import torch.nn.functional as F
-import pytorch_lightning as pl
 
 
-class Model(pl.LightningModule):
+class Model(L.LightningModule):
 
     def __init__(self, vocab_size, max_seq_len, *,
         emb_dim=64,

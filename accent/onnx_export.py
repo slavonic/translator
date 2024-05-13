@@ -1,11 +1,12 @@
+import json
+
+import numpy as np
+import onnx
+import onnxruntime as ort
 import torch
-import pytorch_lightning as pl
+
 from accent.accent_dataset import AccentDataset
 from accent.model import Model
-import onnx
-import json
-import onnxruntime as ort
-import numpy as np
 
 datamodule = AccentDataset()
 datamodule.prepare_data()
