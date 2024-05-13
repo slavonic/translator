@@ -1,11 +1,12 @@
-import torch
-import pytorch_lightning as pl
-from accentru.accentru_dataset import AccentruDataset
-from accent.model import Model
-import onnx
 import json
-import onnxruntime as ort
+
 import numpy as np
+import onnx
+import onnxruntime as ort
+import torch
+
+from accent.model import Model
+from accentru.accentru_dataset import AccentruDataset
 
 datamodule = AccentruDataset()
 datamodule.prepare_data()

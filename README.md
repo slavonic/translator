@@ -10,6 +10,12 @@ Architecture:
 * Out-of-vocabulary words are converted using ML-trained interpolator (see below for the training
   instructions)
 
+## Application requirements
+Install project dependencies using PyPI.
+```shell
+pip install -r requirements.txt
+```
+
 ## Training logs
 
 For translator:

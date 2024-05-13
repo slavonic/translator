@@ -1,0 +1,6 @@
+lightning~=2.2.4
+torch~=2.2.2
+onnx~=1.16.0
+onnxruntime~=1.17.3
+numpy~=1.26.4
+pyctcdecode~=0.5.0

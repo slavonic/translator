@@ -1,14 +1,12 @@
-import pytorch_lightning as pl
-import torch
-import torch.utils.data
-import torch.nn.functional as F
 import os
 import random
-import re
-import collections
+
+import lightning as L
+import torch
+import torch.utils.data
 
 
-class AccentDataset(pl.LightningDataModule):
+class AccentDataset(L.LightningDataModule):
     def __init__(self, *, fname='data/cu-words-civic-dedup-accent.txt',
             max_len=32, batch_size=512):
         super().__init__()
