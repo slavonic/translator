@@ -61,6 +61,15 @@ ONNX model can be used with different runtimes. For example, with in-browser JS 
 Web application using the trained model is in `ui/` sub-directory.
 
 This is a standard Svelte-based web app. Here is the development stanza:
+
+Step 1. Build dependency `ctc-beam-search`:
+```bash
+cd ctc-beam-search/
+npm i
+npm run build
+```
+
+Step 2. Run UI:
 ```bash
 cd ui/
 npm i

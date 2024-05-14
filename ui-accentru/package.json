@@ -1,6 +1,6 @@
 {
   "name": "translator-ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,7 +13,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "ava": "^4.1.0",
-    "ctc-beam-search": "../../ctc-beam-search",
+    "ctc-beam-search": "../ctc-beam-search",
     "onnxruntime-web": "^1.9.0",
     "rollup": "^2.3.4",
     "rollup-plugin-copy": "^3.4.0",
