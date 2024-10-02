@@ -23,15 +23,16 @@ export class Predictor {
             for (const line of cheatText.split('\n')) {
                 const [ru, nk] = line.trim().split('\t').map(x => x.trim());
                 if (ru !== undefined && nk !== undefined) {
-                    const accentIndex = ru.indexOf('\u0301');
+                    const accentIndex = nk.indexOf('\u0301');
                     if (accentIndex > 0 && cheatMap[nk] === undefined) {
-                        cheatMap[nk] = accentIndex - 1;
+                        cheatMap[ru] = accentIndex - 1;
                         count += 1;
                     }
                 }
             }
             console.log(`Loaded ${count} cheat map entries`);
         }
+        console.log(cheatMap["господи"])
         return new Predictor(session, voc, cheatMap, isDebug);
     }
 
