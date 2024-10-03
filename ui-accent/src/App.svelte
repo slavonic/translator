@@ -29,30 +29,57 @@
         return new Promise( resolve => setTimeout(resolve, millis) );
     }
 
+    function* split(regex, str) {
+        let match;
+        let offset = 0;
+        while ((match = regex.exec(str)) !== null) {
+            if (offset < match.index) {
+                yield {
+                    type: 'other',
+                    text: str.slice(offset, match.index),
+                }
+            }
+            yield {
+                    type: 'match',
+                    text: str.slice(match.index, match.index + match[0].length),
+            }
+            offset = match.index + match[0].length;
+        }
+        if (offset < str.length) {
+            yield {
+                type: 'other',
+                text: str.slice(offset),
+            }
+        }
+    }
+
     let translation = [];
     let scrollable;
     const cache = {};
 
     async function engine(text) {
         await tick();
-        const pieces = text.split(RU_TEXT_SPLITTER);
 
         translation.length = 0;
         translation = translation;
 
-        for (const piece of pieces) {
-            let t;
-            if (!RU_TEXT_TESTER.test(piece)) {
-                t = piece;
-            } else if (cache[piece] !== undefined) {
-                t = cache[piece];
+        for (const chunk of split(RU_TEXT_SPLITTER, text)) {
+            if (chunk.type === 'other') {
+                translation.push(chunk.text);
             } else {
-                await sleep(0);
-                t = await predictor.predict(piece);
-                cache[piece] = t;
+                let piece = chunk.text;
+                let t;
+                if (!RU_TEXT_TESTER.test(piece)) {
+                    t = piece;
+                } else if (cache[piece] !== undefined) {
+                    t = cache[piece];
+                } else {
+                    await sleep(0);
+                    t = await predictor.predict(piece);
+                    cache[piece] = t;
+                }
+                translation.push(t);
             }
-
-            translation.push(t);
 
             translation = translation;
             scrollable.scrollTop = scrollable.scrollHeight;
@@ -60,7 +87,7 @@
     }
 
     const RU_TEXT = '[абвгдежзийклмнопрстуфхцчшщьыъэюя\u0301\']+';
-    const RU_TEXT_SPLITTER = new RegExp(`(${RU_TEXT})`, 'i');
+    const RU_TEXT_SPLITTER = new RegExp(`(${RU_TEXT})`, 'ig');
     const RU_TEXT_TESTER = new RegExp(`^${RU_TEXT}$`, 'i');
     const debounce = new Debounce(engine);
 
@@ -80,11 +107,7 @@
             <a class="src" href="https://github.com/slavonic/translator">github.com/slavonic/translator</a>
         </div>
     </div>
-    <div class="border accented" bind:this={scrollable}>
-        {#each translation as t}
-            <span>{t}</span>
-        {/each}
-    </div>
+    <div class="border accented" bind:this={scrollable}>{translation.join('')}</div>
     <div>
         {#if predictor === undefined}
         <div class="center">Подождите, идёт загрузка...</div>
@@ -153,6 +176,9 @@
     }
     .accented {
         font-family: sans-serif;
+        white-space: pre;
+        max-height: 40vh;
+        overflow: auto;
     }
     .notes {
         text-align: center;
