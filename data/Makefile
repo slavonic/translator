@@ -2,7 +2,7 @@
 
 all: cu-words-civic-dedup-accent.txt cu-words-civic-dedup.txt cu-words-civic.txt cu-words-untitlo.txt cu-words-errata.txt
 
-cu-words-civic-dedup-accent.txt: accent.py cu-words-civic-dedup.txt
+cu-words-civic-dedup-accent.txt: accent.py cu-words-civic-dedup.txt accent-addendum.txt
 	echo "Accent"
 	python -m accent
 
