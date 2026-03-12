@@ -6,7 +6,7 @@ cu-words-civic-dedup-accent.txt: accent.py cu-words-civic-dedup.txt accent-adden
 	echo "Accent"
 	python -m accent
 
-cu-words-civic-dedup.txt: dedup.py cu-words-civic.txt
+cu-words-civic-dedup.txt: dedup.py cu-words-civic.txt dedup-addendum.txt
 	echo "Dedup"
 	python -m dedup
 
