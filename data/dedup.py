@@ -1,7 +1,7 @@
 import collections
 
 
-def dedup(fname='cu-words-civic.txt', outname='cu-words-civic-dedup.txt'):
+def dedup(fname='cu-words-civic.txt', outname='cu-words-civic-dedup.txt', addendum='dedup-addendum.txt'):
     with open(fname, encoding='utf-8') as f:
         data = [l.strip().split() for l in f]
     print(f'Loaded {len(data)} samples')
@@ -9,6 +9,13 @@ def dedup(fname='cu-words-civic.txt', outname='cu-words-civic-dedup.txt'):
     byru = collections.defaultdict(collections.Counter)
     for cu, ru, count in data:
         byru[ru].update([cu] * int(count))
+
+    with open(addendum, encoding='utf-8') as f:
+        addendum_data = [l.strip().split('\t') for l in f if l.strip()]
+    print(f'..and {len(addendum_data)} addenda')
+    for cu, ru in addendum_data:
+        if ru not in byru:
+            byru[ru].update({cu: 1})
 
     dedup = []
     for ru in byru.keys():
