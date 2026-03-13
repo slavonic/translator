@@ -41,6 +41,9 @@ export class Predictor {
     }
 
     async predict(text) {
+        if (text.endsWith('ъ')) {
+            text = text.slice(0, -1);
+        }
         if (this.cheatMap[text] !== undefined && !this.isDebug) {
             return this.cheatMap[text];
         }

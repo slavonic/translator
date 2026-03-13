@@ -69,7 +69,7 @@
         }
     }
 
-    const RU_TEXT = '[абвгдежзийклмнопрстуфхцчшщьыъэюя\u0301\']+';
+    const RU_TEXT = '[абвгдежзийклмнопрстуфхцчшщьыъэюяѣ\u0301\']+';
     const RU_TEXT_SPLITTER = new RegExp(`(${RU_TEXT})`, 'i');
     const RU_TEXT_TESTER = new RegExp(`^${RU_TEXT}$`, 'i');
     const NUM_SPLITTER = /(\d+)/;
