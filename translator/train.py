@@ -1,6 +1,5 @@
 import lightning as L
 import torch
-from lightning.pytorch.loggers import WandbLogger
 
 from translator.model import Model
 from translator.translator_dataset import TranslatorDataset
@@ -22,11 +21,16 @@ def main(max_epochs=20, max_steps=4_000, max_chars=32, load_checkpoint=None, res
         else:
             model = Model.load_from_checkpoint(load_checkpoint, vocab_size=datamodule.vocab_size, max_seq_len=max_chars)
 
+    try:
+        from lightning.pytorch.loggers import WandbLogger
+        logger = WandbLogger(log_model=True, project='translator')
+    except (ImportError, ModuleNotFoundError):
+        logger = True  # default TensorBoard logger
+
     trainer = L.Trainer(
         max_epochs=max_epochs,
         max_steps=max_steps,
-        logger=WandbLogger(log_model=True, project='translator'),
-        # resume_from_checkpoint=load_checkpoint,
+        logger=logger,
         callbacks=[L.pytorch.callbacks.LearningRateMonitor(logging_interval='step')],
     )
     trainer.fit(model, datamodule)

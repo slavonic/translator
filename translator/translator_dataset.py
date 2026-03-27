@@ -33,7 +33,7 @@ class TranslatorDataset(L.LightningDataModule):
         os.makedirs(self.cache(''), exist_ok=True)
 
         with open(self.fname, encoding='utf-8') as f:
-            dedup = [l.strip().split() for l in f]
+            dedup = [l.strip().split('\t')[:2] for l in f]
         print(f'Loaded {len(dedup)} samples')
 
         random.shuffle(dedup)
